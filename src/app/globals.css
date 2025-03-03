@@ -1,10 +1,10 @@
 @tailwind base;
-@tailwind components;
 @tailwind utilities;
+@tailwind components;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #161a25;
+  --foreground: white;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -14,14 +14,13 @@
   }
 }
 
-body {
+body, html, header {
   color: var(--foreground);
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
-}
-
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+  box-sizing: border-box;
+  margin: 0px;
+  padding: 0px;
+  width: 100%;
+  display: flex;
 }
