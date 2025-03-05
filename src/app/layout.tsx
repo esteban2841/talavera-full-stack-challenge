@@ -1,10 +1,14 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import { NavBar } from "@/molecules";
 import { StockProvider } from "@/context";
 import { SideBarMenuModal } from "@/molecules/SideBarMenuModal";
 import { Suspense } from "react";
+import dynamic from "next/dynamic";
+
+const NavBar = dynamic(() => import('@/molecules/NavBar'), {
+  ssr: false,
+});
 
 const defaultUrl = process.env.PROD_DOMAIN
 ? `https://${process.env.PROD_DOMAIN}`

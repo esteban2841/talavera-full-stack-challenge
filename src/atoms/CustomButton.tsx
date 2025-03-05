@@ -93,7 +93,7 @@ const SliderButtonContainer = styled.button<CssProps>`
 
 const template = (type: string, colorText?: string, bg?: string, hoverBg?: string, hoverColor?: string, size?: string,  bold?: boolean,) : string => {
   const styles : any = {
-    primary: ` rounded-lg  ${bold ? 'font-bold': ''} px-4 py-2 hover:px-2 hover:py-0 text-xl text-[${colorText}] bg-[${bg}] w-[${size || 'full'}]`,
+    primary: ` rounded-lg  ${bold ? 'font-bold': ''} px-4 py-2 hover:px-6 hover:py-0 text-xl text-[${colorText}] bg-[${bg}] w-[${size || 'full'}]`,
     submit: ` rounded-lg  ${bold ? 'font-bold': ''} text-xl text-[${colorText}] bg-[${bg}] w-[${size || 'full'}]`,
     secondary: ` rounded-lg  ${bold ? 'font-bold': ''} text-xl  text-[${colorText}] bg-[${bg}] w-[${size || 'full'}]`,
     close: ` rounded-lg text-xl  ${bold ? 'font-bold': ''}  text-[${colorText}] bg-[${bg}] w-[${size || 'full'}]`,

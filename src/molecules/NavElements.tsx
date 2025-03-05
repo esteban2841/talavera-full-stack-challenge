@@ -32,6 +32,7 @@ const ListNavBar = styled.ul`
     align-items: center;
     justify-content: flex-end;
     margin: 0;
+    width: 50%;
     height: 100%;
     box-sizing: border-box;
     &:hover{

@@ -3,39 +3,41 @@ import { FormEvent, useContext } from "react"
 import { CustomButton, CustomInput, CustomText } from "@/atoms"
 import { useRouter } from "next/navigation"
 import { StockContext } from "@/context"
+import axios from "axios"
 
 export const LoginForm = () => {
 
+
+  const uri = 'http://localhost:3000'
   const router = useRouter()
-  const { toggleSideBarMenu } = useContext(StockContext)
+  const { toggleSideBarMenu, setUserLogged } = useContext(StockContext)
 
   const handleRegister = async (e: FormEvent<HTMLFormElement>)=>{
     e.preventDefault()
 
     const formData = {
-      correo: new FormData(e.currentTarget).get('correo'),
-      contraseña: new FormData(e.currentTarget).get('contraseña'),
+      email: new FormData(e.currentTarget).get('correo'),
+      password: new FormData(e.currentTarget).get('contraseña'),
     }
 
+    const data = JSON.parse(JSON.stringify(formData))
+		console.log("TCL: handleRegister -> data", data)
+
     try {
-      const loginResponse = await fetch(
-        '/api/login',
+      const loginResponse = await axios.post(
+        `${uri}/api/auth/login`,
         {
-          method: 'POST',
-          headers:{
-            'Content-Type': 'application/json'
-          },
-          cache: 'no-cache',
-          body: JSON.stringify({
-            correo: formData.correo, 
-            contraseña: formData.contraseña
-          })
+          ...data
         }
       )
       if(loginResponse.status == 200){
-        await loginResponse.json()
+        const user = loginResponse.data.token
+				console.log("TCL: handleRegister -> user", user)
+        localStorage.setItem('user', JSON.stringify(user.user))
+        localStorage.setItem('authToken', JSON.stringify(user.token))
         toggleSideBarMenu && toggleSideBarMenu('')
-        router.push('/profile')
+        setUserLogged && setUserLogged(user.user)
+        router.push('/stock')
       }
     } catch (error: any) {
       const errorMessage = error.response?.data?.message || 'Algo salio mal. Por favor intentelo de nuevo'

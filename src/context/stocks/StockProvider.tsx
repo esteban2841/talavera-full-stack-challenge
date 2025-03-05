@@ -4,6 +4,7 @@ import { StockContext } from './StockContext';
 import { StockReducer } from './StockReducer';
 import dotenv from 'dotenv';
 import { useRouter } from 'next/navigation';
+import axios from 'axios';
 
 dotenv.config({ path: './.env.local' });
 export interface SectionRef {
@@ -13,8 +14,11 @@ export interface SectionRef {
 
 const INITIAL_STATE: StockContext = {
     activeSideBarMenu: '',
+    activeStockListModal: false,
+    stockGainersList: {},
     user: {
         username: '',
+        email: '',
         password: '',
         name: '',
         balance: 0,
@@ -35,10 +39,33 @@ export const StockProvider = ({children}: Props) => {
             
         dispatch({type:'toggleSideBarMenu', payload: payload})
     }
+    const toggleStockListModal = (payload: StockContext) =>{
+		console.log("TCL: toggleStockListModal -> payload", payload)
+        dispatch({type:'toggleStockListModal', payload: payload})
+    }
     
     const setUserLogged = async (payload: StockContext) =>{
        
         dispatch({type:'setUserLogged', payload: payload})
+        
+      
+    }
+    const setStockListGainers = async (payload: StockContext) =>{
+		console.log("TCL: setStockListGainers -> payload", payload)
+        const uri = 'https://www.alphavantage.co/query?function=TOP_GAINERS_LOSERS&apikey=' + process.env.ALPHA_API_KEY
+        try {
+            const respuesta = await axios.get(uri);
+            console.log("TCL: getStockTop -> respuesta", respuesta)
+            dispatch({type:'setStockListGainers', payload: {
+                top_gainers: respuesta.data.top_gainers,
+                top_losers: respuesta.data.top_losers
+            }})
+        } catch (error) {
+            console.error(error)
+
+            }
+
+
         
       
     }
@@ -51,14 +78,17 @@ export const StockProvider = ({children}: Props) => {
         
     }
     
+    
 
 
     return (
         <StockContext.Provider value={{
             ...state,
             toggleSideBarMenu,
+            toggleStockListModal,
             setUserLogged,
             logout,
+            setStockListGainers
         }}>
             {children}
         </StockContext.Provider>

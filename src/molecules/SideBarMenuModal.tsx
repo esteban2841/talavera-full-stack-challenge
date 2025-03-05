@@ -4,6 +4,7 @@ import { useContext } from "react"
 import styled from "styled-components"
 import { CustomButton } from "@/atoms"
 import { LoginForm, RegisterForm } from "@/molecules"
+import Account from "@/atoms/Account"
 
 const Overlay = styled.aside`
     display: flex;
@@ -65,6 +66,21 @@ export const SideBarMenuModal = () => {
                     <SideBarModal>
                         <CustomButton args={''} action="toggleSideBarMenu" size="'20'" content="X" type="close" bg="#000" colorText="#fff" hoverBg="rgb(56 189 248)"  hoverColor="rgb(8 51 68)"/>
                         <RegisterForm/>
+
+                    </SideBarModal>
+                    {/* <div className="flex flex-col w-full items-center">
+                        INGRESAR
+                        </div> */}
+                </Overlay>
+            )
+        }
+
+        if( menu == 'account' ){
+            return (
+                <Overlay>
+                    <SideBarModal>
+                        <CustomButton args={''} action="toggleSideBarMenu" size="'20'" content="X" type="close" bg="#000" colorText="#fff" hoverBg="rgb(56 189 248)"  hoverColor="rgb(8 51 68)"/>
+                        <Account/>
 
                     </SideBarModal>
                     {/* <div className="flex flex-col w-full items-center">

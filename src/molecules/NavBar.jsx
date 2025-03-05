@@ -1,8 +1,11 @@
 'use client'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { FinanceProLogo } from '@/atoms';
+import { CustomButton, FinanceProLogo } from '@/atoms';
 import { NavBarElements } from '@/molecules';
+import { StockContext } from '@/context';
+import ProfileIcon from '@/atoms/ProfileIcon';
+import StocksListModal from '@/atoms/StocksListModal';
 
 const NavBarContainer = styled.nav`
     display: flex;
@@ -36,6 +39,16 @@ const HeaderContainer = styled.header`
     width: 100%;
     height: 70px;
 `
+const LeftSectionContainer = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    position: relative;
+    width: 100%;
+    align-items: center;
+    height: 70px;
+    gap: 20px;
+`
 
 const IconContainer = styled.div`
     display: flex;
@@ -59,20 +72,41 @@ const IconContainer = styled.div`
 const NavBar = ({baseUrl}) => {
     const [ isScrolledThenChangeColor, setIsScrolledThenChangeColor ] = useState(false)
     
-    const navBarSections = [
-        {title: 'Entrar', sideBarMenu: 'login', children: <h1>Entrar</h1>},
-        {title: 'Registrarse', sideBarMenu: 'registro', children: <h1>Registrarse</h1>},
-      ]
+    const {activeStockListModal, toggleStockListModal} = useContext(StockContext)
+    const [user, setUser] = useState(localStorage.getItem('user')|| {})
+    const [userLogged, setUserLogged] = useState(localStorage.getItem('authToken'))
+    
+    const navBarSections =!userLogged? [
+        {title: 'Entrar', sideBarMenu: 'login', children: <h1>Login</h1>},
+        {title: 'Registrarse', sideBarMenu: 'registro', children: <h1>Register</h1>},
+    ]  :
+    [
+        {title: 'balance', href: 'stock', children: <span className='flex items-center justify-center'>
+            <h2>{`$ ${user.balance}`}</h2>
+        </span>},
+        {title: 'account', sideBarMenu: 'account', children: <ProfileIcon user={user}/> },
+    ] 
+    
     useEffect(()=>{
         const handleChangeColorOnNav = () => window.scrollY >= 30 ? setIsScrolledThenChangeColor(true) : setIsScrolledThenChangeColor(false)
         window.addEventListener('scroll', handleChangeColorOnNav)
     }, [window.scrollY])
+
+        
+    useEffect(()=>{
+        setUserLogged(localStorage.getItem('authToken') )
+        setUser(JSON.parse(localStorage.getItem('user')) )
+    }, [userLogged])
     
-    
+
     return (
         <HeaderContainer>
             <NavBarContainer $opacity={isScrolledThenChangeColor} >
-                <FinanceProLogo/>
+                <LeftSectionContainer>
+                    <FinanceProLogo/>
+                    { userLogged && <CustomButton type='primary' bg='black' action={'toggleStockListModal'} args={!activeStockListModal} colorText='#0a0a0a' content={'+'} size='60'/>}
+                    {activeStockListModal && <StocksListModal/>}
+                </LeftSectionContainer>
                 <NavBarElements baseUrl={baseUrl} data={navBarSections} customSize='20px' color='#fff' hoverColor={'#E84C1A'} weight={600}/>
                 {/* <CustomButton content='Cerrar sesión' type='secondary' action={handleLogout}/> */}
             </NavBarContainer>

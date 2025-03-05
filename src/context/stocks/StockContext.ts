@@ -6,7 +6,20 @@ export interface User {
     name: string,
     username: string,
     password:string,
+    email:string,
     balance?: number
+}
+export interface StockGainers {
+    top_gainers: StockGainerObj[],
+    top_losers: StockGainerObj[],
+}
+
+export interface StockGainerObj {
+    ticker: string,
+    price: string,
+    change_amount: string,
+    change_percentage: string,
+    volume: string
 }
 
 export interface StockContext {
@@ -14,8 +27,11 @@ export interface StockContext {
     [key: string]: any;
     //sidebar actions
     activeSideBarMenu?: string
+    stockGainersList?: StockGainers
     toggleSideBarMenu?: (payload: any) => void
-
+    
+    activeStockListModal?: boolean
+    toggleStockListModal?: (payload: any) => void
     //user actions login and register
     user?: User
     fetchUsuario?: (payload: any) => void
@@ -25,6 +41,7 @@ export interface StockContext {
 
     //cart actions
     setUserLogged?: (payload: any) => void
+    setStockListGainers?: (payload: any) => void
     logout?: (payload: any) => void
 
     
