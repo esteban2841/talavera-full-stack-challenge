@@ -1,19 +1,23 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 'use client'
-import { FormEvent } from "react"
+import { FormEvent, useContext } from "react"
 import { CustomButton, CustomInput, CustomText } from "@/atoms"
 import { useRouter } from "next/navigation"
 import axios from "axios"
+import dotenv from "dotenv"
+import { StockContext } from "@/context"
+
+dotenv.config({ path: './.env' });
 
 
 export const RegisterForm = () => {
-
-  const uri = 'http://localhost:3000'
+  const {  setUserLogged } = useContext(StockContext)
+  const uri = process.env.BACKEND_URI
   
   const router = useRouter()
   
   const handleRegister = async (e: FormEvent<HTMLFormElement>)=>{
     e.preventDefault()
-    console.log("TCL: RegisterForm -> uri", uri)
 
     const formData = {
       name: new FormData(e.currentTarget).get('nombre'),
@@ -23,7 +27,6 @@ export const RegisterForm = () => {
     }
     
     const data = JSON.parse(JSON.stringify(formData))
-		console.log("TCL: handleRegister -> data", data)
     try {
       const registerResponse = await axios.post(
         `${uri}/api/auth/register`,
@@ -33,19 +36,20 @@ export const RegisterForm = () => {
       )
       console.log("TCL: handleRegister -> registerResponse", registerResponse)
       if(registerResponse.status == 200){
-        const loginResponse = await axios(
+        const loginResponse = await axios.post(
           `${uri}/api/auth/login`,
           {
             ...data
           }
         )
         if(loginResponse.status == 200){
-          await loginResponse.json()
+          const user = loginResponse.data.token
+          setUserLogged && setUserLogged(user.user)
           router.push('/')
         }
       }
     } catch (error) {
-      const errorMessage = (error as any).response?.data?.message || 'Algo salio mal. Por favor intentelo de nuevo'
+      error  || 'Algo salio mal. Por favor intentelo de nuevo'
     }
 
   }

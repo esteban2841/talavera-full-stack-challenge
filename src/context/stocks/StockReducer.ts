@@ -1,6 +1,12 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { StockContext } from './StockContext';
 
-export const StockReducer = (state: StockContext, action: any) : StockContext => {
+interface Actions {
+    type: string,
+    payload: any
+}
+
+export const StockReducer = (state: StockContext, action: Actions) : StockContext => {
     switch (action.type) {
         case 'toggleSideBarMenu':
             return{

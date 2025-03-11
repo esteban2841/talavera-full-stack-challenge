@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 'use client'
 import { FormEvent, useContext } from "react"
 import { CustomButton, CustomInput, CustomText } from "@/atoms"
@@ -8,21 +9,21 @@ import axios from "axios"
 export const LoginForm = () => {
 
 
-  const uri = 'http://localhost:3000'
+  const uri = process.env.NEXT_PUBLIC_CLIENT_KEY_BACKEND_URI
   const router = useRouter()
   const { toggleSideBarMenu, setUserLogged } = useContext(StockContext)
-
+  
   const handleRegister = async (e: FormEvent<HTMLFormElement>)=>{
     e.preventDefault()
-
+    
     const formData = {
       email: new FormData(e.currentTarget).get('correo'),
       password: new FormData(e.currentTarget).get('contraseña'),
     }
-
+    
     const data = JSON.parse(JSON.stringify(formData))
-		console.log("TCL: handleRegister -> data", data)
-
+    
+    console.log("TCL: LoginForm -> uri", uri)
     try {
       const loginResponse = await axios.post(
         `${uri}/api/auth/login`,
@@ -32,15 +33,14 @@ export const LoginForm = () => {
       )
       if(loginResponse.status == 200){
         const user = loginResponse.data.token
-				console.log("TCL: handleRegister -> user", user)
         localStorage.setItem('user', JSON.stringify(user.user))
+        setUserLogged && setUserLogged(user.user)
         localStorage.setItem('authToken', JSON.stringify(user.token))
         toggleSideBarMenu && toggleSideBarMenu('')
-        setUserLogged && setUserLogged(user.user)
         router.push('/stock')
       }
     } catch (error: any) {
-      const errorMessage = error.response?.data?.message || 'Algo salio mal. Por favor intentelo de nuevo'
+      error || 'Algo salio mal. Por favor intentelo de nuevo'
     }
 
   }

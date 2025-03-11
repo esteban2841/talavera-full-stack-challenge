@@ -1,7 +1,5 @@
-import { StockContext } from '@/context'
 import dotenv from 'dotenv'
 import { useRouter } from 'next/navigation'
-import { useContext, useEffect } from 'react'
 
 dotenv.config()
 

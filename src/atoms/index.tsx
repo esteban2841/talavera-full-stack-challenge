@@ -2,6 +2,8 @@ import { FinanceProLogo } from "./FinanceProLogo"
 import { CustomButton } from "./CustomButton"
 import { CustomInput } from "./CustomInput"
 import { CustomText } from "./CustomText"
+import { Background3DModel } from "./Background3DModel"
+import { Loader } from "./Loader"
 import WrapperRowRouterRedirect from "./WrapperRowRenderer"
 
 export {
@@ -9,5 +11,7 @@ export {
     WrapperRowRouterRedirect,
     CustomButton,
     CustomInput,
-    CustomText
+    CustomText,
+    Background3DModel,
+    Loader
 }

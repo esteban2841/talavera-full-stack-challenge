@@ -14,7 +14,7 @@ export const CandlestickChart = ({ data, width = 1200, height = 600 }) => {
     // Set up SVG container
     const svg = d3.select(chartRef.current)
       .attr('width', '100%')
-      .attr('height', '1000')
+      .attr('height', '100%')
       .style('background', '#000')
       .style('border', '1px solid #000');
 
@@ -56,6 +56,7 @@ export const CandlestickChart = ({ data, width = 1200, height = 600 }) => {
     // Add X axis
     svg.append('g')
       .attr('transform', `translate(0, ${height})`)
+      .attr('className', `interval-tags`)
       .call(d3.axisBottom(xScale).ticks(5))
       .selectAll('text')
       .style('text-anchor', 'end')
@@ -68,6 +69,22 @@ export const CandlestickChart = ({ data, width = 1200, height = 600 }) => {
       .call(d3.axisLeft(yScale));
   }, [data, width, height]);
 
-  return <svg ref={chartRef}></svg>;
+  return (
+    <figure className='w-full p-8 bg-black h-full flex-col flex justify-center items-center'>
+      <svg className='chart' style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '1200px',
+        height: '700px',
+        overflow: 'visible'
+      }} ref={chartRef}></svg>
+      <figcaption className=''>
+        {
+          data[0].symbol + ' movements in a 15 minutes interval'
+        }
+      </figcaption>
+    </figure>
+  );
 };
 

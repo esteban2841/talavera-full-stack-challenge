@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
+/* eslint-disable react-hooks/exhaustive-deps */
 'use client'
 import React, { useContext, useEffect, useState } from 'react'
 import styled from 'styled-components'
@@ -50,54 +52,75 @@ const LeftSectionContainer = styled.div`
     gap: 20px;
 `
 
-const IconContainer = styled.div`
-    display: flex;
-    align-items: center;
-    width: 50px;
-    height: 50px;
-    cursor: pointer;
+// const IconContainer = styled.div`
+//     display: flex;
+//     align-items: center;
+//     width: 50px;
+//     height: 50px;
+//     cursor: pointer;
 
-    svg path{
-        filter: drop-shadow(inset 4px 6px 1px rgb(5, 5, 5)); 
-    }
-    :hover{
-        transform: rotate(-45deg);
-    }
-    @media (min-width: 768px) {
-        display: none;
-    }
-`
+//     svg path{
+//         filter: drop-shadow(inset 4px 6px 1px rgb(5, 5, 5)); 
+//     }
+//     :hover{
+//         transform: rotate(-45deg);
+//     }
+//     @media (min-width: 768px) {
+//         display: none;
+//     }
+// `
+
+export function useMounted() {
+    const [mounted, setMounted] = useState(false)
+    useEffect(() => setMounted(true), [])
+    return mounted
+  }
 
 
 const NavBar = ({baseUrl}) => {
     const [ isScrolledThenChangeColor, setIsScrolledThenChangeColor ] = useState(false)
+
+    const isMounted = useMounted()
     
-    const {activeStockListModal, toggleStockListModal} = useContext(StockContext)
-    const [user, setUser] = useState(localStorage.getItem('user')|| {})
-    const [userLogged, setUserLogged] = useState(localStorage.getItem('authToken'))
-    
-    const navBarSections =!userLogged? [
+    const {activeStockListModal} = useContext(StockContext)
+    const [user, setUser] = useState()
+	console.log("TCL: NavBar -> user", user)
+    const [userLogged, setUserLogged] = useState()
+    const [renderSections, setRenderSections] = useState([])
+    const withoutUserLoggedSections =  [
         {title: 'Entrar', sideBarMenu: 'login', children: <h1>Login</h1>},
         {title: 'Registrarse', sideBarMenu: 'registro', children: <h1>Register</h1>},
-    ]  :
-    [
+    ] 
+    const withUserLoggedSections = (user)=>[
         {title: 'balance', href: 'stock', children: <span className='flex items-center justify-center'>
             <h2>{`$ ${user.balance}`}</h2>
         </span>},
         {title: 'account', sideBarMenu: 'account', children: <ProfileIcon user={user}/> },
-    ] 
+    ]
+     
     
-    useEffect(()=>{
-        const handleChangeColorOnNav = () => window.scrollY >= 30 ? setIsScrolledThenChangeColor(true) : setIsScrolledThenChangeColor(false)
+    useEffect(() => {
+        if (!isMounted) return
+    
+        const handleChangeColorOnNav = () => {
+          setIsScrolledThenChangeColor(window.scrollY >= 30)
+        }
+    
         window.addEventListener('scroll', handleChangeColorOnNav)
-    }, [window.scrollY])
-
-        
-    useEffect(()=>{
-        setUserLogged(localStorage.getItem('authToken') )
-        setUser(JSON.parse(localStorage.getItem('user')) )
-    }, [userLogged])
+        return () => window.removeEventListener('scroll', handleChangeColorOnNav)
+      }, [isMounted])
     
+      useEffect(() => {
+        const userloggedStorage = localStorage.getItem('authToken')
+        setUserLogged(userloggedStorage)
+        const userInfo = JSON.parse(localStorage.getItem('user'))
+        setUser(userInfo)
+        userloggedStorage 
+          ? setRenderSections(withUserLoggedSections(userInfo))
+          : setRenderSections(withoutUserLoggedSections)
+      }, [userLogged])
+    
+      if (!isMounted) return <div>Loading...</div>
 
     return (
         <HeaderContainer>
@@ -107,7 +130,7 @@ const NavBar = ({baseUrl}) => {
                     { userLogged && <CustomButton type='primary' bg='black' action={'toggleStockListModal'} args={!activeStockListModal} colorText='#0a0a0a' content={'+'} size='60'/>}
                     {activeStockListModal && <StocksListModal/>}
                 </LeftSectionContainer>
-                <NavBarElements baseUrl={baseUrl} data={navBarSections} customSize='20px' color='#fff' hoverColor={'#E84C1A'} weight={600}/>
+                <NavBarElements baseUrl={baseUrl} data={renderSections} customSize='20px' color='#fff' hoverColor={'#E84C1A'} weight={600}/>
                 {/* <CustomButton content='Cerrar sesión' type='secondary' action={handleLogout}/> */}
             </NavBarContainer>
         </HeaderContainer>

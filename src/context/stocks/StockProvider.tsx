@@ -1,12 +1,12 @@
 'use client'
-import React, { useReducer, useRef } from 'react'
+import React, { useReducer } from 'react'
 import { StockContext } from './StockContext';
 import { StockReducer } from './StockReducer';
 import dotenv from 'dotenv';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
 
-dotenv.config({ path: './.env.local' });
+dotenv.config({ path: './.env' });
 export interface SectionRef {
     current: HTMLElement,
     name: string
@@ -15,7 +15,10 @@ export interface SectionRef {
 const INITIAL_STATE: StockContext = {
     activeSideBarMenu: '',
     activeStockListModal: false,
-    stockGainersList: {},
+    stockGainersList: {
+        top_gainers:[],
+        top_losers: []
+    },
     user: {
         username: '',
         email: '',

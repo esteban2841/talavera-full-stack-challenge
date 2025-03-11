@@ -1,10 +1,13 @@
 import { CandlestickChart } from "@/atoms/CandleChart"
-import axios from "axios"
+import { NavBar } from "@/molecules"
 import { unstable_noStore } from "next/cache"
-
+import { Suspense } from "react"
+const defaultUrl = process.env.PROD_DOMAIN
+? `https://${process.env.PROD_DOMAIN}`
+: "http://localhost:3000";
 const page = async () => {
   unstable_noStore()
-  const url : string = `${process.env.BACKEND_URI || 'http://localhost:3000/api/stock/history'}`
+  const url : string = `${process.env.BACKEND_URI || 'http://localhost:3001/api/stock/history'}`
 	console.log("TCL: page -> url", url)
   // const SymbolStockHistory = await axios.get(url) 
   const SymbolStockHistory =   [
@@ -813,7 +816,14 @@ const page = async () => {
 	console.log("TCL: page -> SymbolStockHistory", SymbolStockHistory)
 
   return (
-    <div className="flex w-full justify-center items-center">
+    <div className="flex flex-col w-full justify-center items-center relative">
+      <Suspense fallback={
+        <nav className="flex w-full bg-black h-[50px]">
+
+        </nav>
+      }>
+        <NavBar baseUrl={defaultUrl} />
+      </Suspense>
       <CandlestickChart data={SymbolStockHistory.slice(0,50)} />
     </div>
   )
