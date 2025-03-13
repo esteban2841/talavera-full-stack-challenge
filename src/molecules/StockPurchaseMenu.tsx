@@ -17,10 +17,9 @@ export const StockPurchaseMenu = () => {
   
   const handlePurchase = async ()=>{
     console.log("TCL: StockPurchaseMenu -> user", usuario, staleQuantity, currentSymbolPrice)
-    const userModified = await axios.put(process.env.NEXT_PUBLIC_CLIENT_KEY_BACKEND_URI || '',{
+    const userModified = await axios.put(process.env.NEXT_PUBLIC_CLIENT_KEY_BACKEND_URI + '/api/user/purchase' || '',{
       userToAddStock: {
         ...usuario,
-        balance: usuario.balance - staleQuantity,
       },
       currentSymbolPrice,
       staleQuantity
