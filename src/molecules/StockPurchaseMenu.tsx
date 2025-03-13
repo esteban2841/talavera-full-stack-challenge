@@ -10,7 +10,7 @@ export const StockPurchaseMenu = () => {
 
   const {usuario, currentSymbolPrice, setUserLogged} = useContext(StockContext)
   
-  const quantityHandler = (e: React.MouseEvent<HTMLDivElement>)=>{
+  const quantityHandler = (e: React.MouseEvent<HTMLButtonElement>)=>{
     const ref = e.currentTarget.id
     const newStaleQuantity = ref == 'plus' ? staleQuantity + 10 : staleQuantity > 10 ? staleQuantity -10 : staleQuantity
     seStaleQuantity(newStaleQuantity)

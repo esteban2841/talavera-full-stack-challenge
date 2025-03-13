@@ -3,11 +3,11 @@
 import * as d3 from 'd3';
 import io from 'socket.io-client'
 import { RefObject, useContext, useEffect, useRef, useState } from 'react';
-import { StockHistory, StockType } from '@/types';
+import { StockHistory } from '@/types';
 import { StockContext } from '@/context';
 
 interface CandleChartProps {
-  data: StockHistory[],
+  data: StockHistory,
   height?: number
   width?: number
 }

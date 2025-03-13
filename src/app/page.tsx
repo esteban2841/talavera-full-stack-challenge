@@ -3,7 +3,7 @@ import { NavBar, Object3DRenderer } from "@/molecules";
 import { Suspense } from "react";
 const defaultUrl = process.env.PROD_DOMAIN
 ? `https://${process.env.PROD_DOMAIN}`
-: "http://localhost:3000";
+: process.env.NEXT_PUBLIC_CLIENT_KEY_BACKEND_URI;
 
 const BackgroundModel3D = {
   children: <Background3DModel />,

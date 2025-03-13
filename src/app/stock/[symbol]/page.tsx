@@ -4,12 +4,12 @@ import { notFound } from "next/navigation"
 import { Suspense } from "react"
 const defaultUrl = process.env.PROD_DOMAIN
 ? `https://${process.env.PROD_DOMAIN}`
-: "http://localhost:3000";
+: process.env.NEXT_PUBLIC_CLIENT_KEY_BACKEND_URI;
 const Page = async ({params}: {params : {symbol: string}}) => {
     const symbol = params.symbol
     
     if(!symbol) notFound()
-    const url : string = `${process.env.BACKEND_URI || 'http://localhost:3001/api/stock/history/' + symbol}`
+    const url : string = `${process.env.NEXT_PUBLIC_CLIENT_KEY_BACKEND_URI + '/api/stock/history/' + symbol}`
 
     const SymbolStockHistory = await axios.get(url) 
     

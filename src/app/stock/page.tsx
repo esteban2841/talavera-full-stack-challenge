@@ -6,12 +6,12 @@ import { unstable_noStore } from "next/cache"
 import { Suspense } from "react"
 const defaultUrl = process.env.PROD_DOMAIN
 ? `https://${process.env.PROD_DOMAIN}`
-: "http://localhost:3000";
+: process.env.NEXT_PUBLIC_CLIENT_KEY_BACKEND_URI;
 
 
 const page = async () => {
   unstable_noStore()
-  const url : string = `${process.env.BACKEND_URI || 'http://localhost:3001/api/stock/history'}`
+  const url : string = `${process.env.NEXT_PUBLIC_CLIENT_KEY_BACKEND_URI + '/api/stock/history'}`
 
   const res : AxiosResponse<StockHistory> = await axios.get(url)
 	const data = await res.data
