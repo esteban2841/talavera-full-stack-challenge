@@ -8,6 +8,7 @@ import { NavBarElements } from '@/molecules';
 import { StockContext } from '@/context';
 import ProfileIcon from '@/atoms/ProfileIcon';
 import StocksListModal from '@/atoms/StocksListModal';
+import { useRouter } from 'next/navigation';
 
 const NavBarContainer = styled.nav`
     display: flex;
@@ -81,23 +82,25 @@ const NavBar = ({baseUrl}) => {
     const [ isScrolledThenChangeColor, setIsScrolledThenChangeColor ] = useState(false)
 
     const isMounted = useMounted()
-    
-    const {activeStockListModal} = useContext(StockContext)
-    const [user, setUser] = useState()
-	console.log("TCL: NavBar -> user", user)
-    const [userLogged, setUserLogged] = useState()
+    const router = useRouter()
+
+    const {activeStockListModal, setUserLogged} = useContext(StockContext)
+    const [userLoggedLocally, setUserLoggedLocally] = useState()
     const [renderSections, setRenderSections] = useState([])
     const withoutUserLoggedSections =  [
         {title: 'Entrar', sideBarMenu: 'login', children: <h1>Login</h1>},
         {title: 'Registrarse', sideBarMenu: 'registro', children: <h1>Register</h1>},
     ] 
     const withUserLoggedSections = (user)=>[
-        {title: 'balance', href: 'stock', children: <span className='flex items-center justify-center'>
+        {title: 'balance', href: '/stock', children: <span className='flex items-center justify-center'>
             <h2>{`$ ${user.balance}`}</h2>
         </span>},
         {title: 'account', sideBarMenu: 'account', children: <ProfileIcon user={user}/> },
     ]
      
+    const redirect = ()=>{
+        router.push('/')
+    }
     
     useEffect(() => {
         if (!isMounted) return
@@ -112,22 +115,26 @@ const NavBar = ({baseUrl}) => {
     
       useEffect(() => {
         const userloggedStorage = localStorage.getItem('authToken')
-        setUserLogged(userloggedStorage)
+        setUserLoggedLocally(userloggedStorage)
         const userInfo = JSON.parse(localStorage.getItem('user'))
-        setUser(userInfo)
+        setUserLogged(userInfo)
         userloggedStorage 
           ? setRenderSections(withUserLoggedSections(userInfo))
           : setRenderSections(withoutUserLoggedSections)
-      }, [userLogged])
+      }, [userLoggedLocally])
     
+      
       if (!isMounted) return <div>Loading...</div>
 
     return (
         <HeaderContainer>
             <NavBarContainer $opacity={isScrolledThenChangeColor} >
                 <LeftSectionContainer>
-                    <FinanceProLogo/>
-                    { userLogged && <CustomButton type='primary' bg='black' action={'toggleStockListModal'} args={!activeStockListModal} colorText='#0a0a0a' content={'+'} size='60'/>}
+                    <div onClick={redirect} className='cursor-pointer' >
+
+                        <FinanceProLogo/>
+                    </div>
+                    { userLoggedLocally && <CustomButton type='primary' bg='black' action={'toggleStockListModal'} args={!activeStockListModal} colorText='#0a0a0a' content={'+'} size='60'/>}
                     {activeStockListModal && <StocksListModal/>}
                 </LeftSectionContainer>
                 <NavBarElements baseUrl={baseUrl} data={renderSections} customSize='20px' color='#fff' hoverColor={'#E84C1A'} weight={600}/>

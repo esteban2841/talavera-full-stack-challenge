@@ -14,6 +14,15 @@ export interface StockGainers {
     top_losers: StockGainerObj[],
 }
 
+export interface StockType{
+    date?: Date
+    time?: number
+    open: string
+    close: string
+    volume: string
+    symbol: string
+  }
+
 export interface StockGainerObj {
     ticker: string,
     price: string,
@@ -36,6 +45,8 @@ export interface StockContext {
     user?: User
     fetchUsuario?: (payload: any) => void
 
+    currentSymbolPrice: StockType
+    setCurrentSymbolPrice?: (payload: any) => void
     //product details and cart state
     // filled from fetching the products from the product-data on app component to render catalog
 

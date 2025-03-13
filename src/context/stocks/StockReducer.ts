@@ -49,6 +49,12 @@ export const StockReducer = (state: StockContext, action: Actions) : StockContex
                     departamento: {id: 0, name: ''},
                 }
             }
+        case 'setCurrentSymbolPrice':
+
+            return {
+                ...state,
+                currentSymbolPrice: action.payload
+            }
             
             default:
             return state

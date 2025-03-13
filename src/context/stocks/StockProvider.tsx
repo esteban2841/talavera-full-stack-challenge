@@ -5,6 +5,7 @@ import { StockReducer } from './StockReducer';
 import dotenv from 'dotenv';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
+import { now } from 'mongoose';
 
 dotenv.config({ path: './.env' });
 export interface SectionRef {
@@ -18,6 +19,14 @@ const INITIAL_STATE: StockContext = {
     stockGainersList: {
         top_gainers:[],
         top_losers: []
+    },
+    currentSymbolPrice:{
+        date: new Date(Date()),
+        time: 0,
+        open: '',
+        close: '',
+        volume: '',
+        symbol: ''
     },
     user: {
         username: '',
@@ -50,6 +59,12 @@ export const StockProvider = ({children}: Props) => {
     const setUserLogged = async (payload: StockContext) =>{
        
         dispatch({type:'setUserLogged', payload: payload})
+        
+      
+    }
+    const setCurrentSymbolPrice = async (payload: StockContext) =>{
+       
+        dispatch({type:'setCurrentSymbolPrice', payload: payload})
         
       
     }
@@ -91,7 +106,8 @@ export const StockProvider = ({children}: Props) => {
             toggleStockListModal,
             setUserLogged,
             logout,
-            setStockListGainers
+            setStockListGainers,
+            setCurrentSymbolPrice
         }}>
             {children}
         </StockContext.Provider>

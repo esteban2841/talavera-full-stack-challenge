@@ -13,5 +13,5 @@ export {
     CustomInput,
     CustomText,
     Background3DModel,
-    Loader
+    Loader,
 }

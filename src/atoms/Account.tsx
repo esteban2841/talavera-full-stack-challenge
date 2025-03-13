@@ -9,17 +9,8 @@ const Account = () => {
             <span>
                 <CustomText type="catalog" content="My holdings"/>
             </span>
-            <span>
-                <CustomText type="catalog" content="Balance"/>
-            </span>
-            <span>
-                <CustomText type="catalog" content="Stocks"/>
-            </span>
         </div>
         <div className="flex flex-col justify-start items-center">
-            <span>
-                <CustomText type="catalog" content="Contact"/>
-            </span>
             <span>
                 <CustomText type="catalog" content="Logout"/>
             </span>

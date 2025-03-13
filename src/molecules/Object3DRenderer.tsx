@@ -9,7 +9,6 @@ import { Loader } from "@/atoms";
 const ThreeDimentionContainerRenderer = styled.div`
   height: 100vh;
   width: 100vw;
-  position: absolute;
   background-color: transparent;
   cursor: pointer;
 `
