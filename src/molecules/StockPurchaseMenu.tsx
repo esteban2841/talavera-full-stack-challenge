@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 'use client'
 import { CustomText } from "@/atoms"
 import { StockContext } from "@/context"
@@ -7,7 +8,7 @@ import { useContext, useState } from "react"
 export const StockPurchaseMenu = () => {
   const [staleQuantity, seStaleQuantity] = useState(10)
 
-  const {usuario, currentSymbolPrice} = useContext(StockContext)
+  const {usuario, currentSymbolPrice, setUserLogged} = useContext(StockContext)
   
   const quantityHandler = (e: React.MouseEvent<HTMLDivElement>)=>{
     const ref = e.currentTarget.id
@@ -16,7 +17,6 @@ export const StockPurchaseMenu = () => {
   }
   
   const handlePurchase = async ()=>{
-    console.log("TCL: StockPurchaseMenu -> user", usuario, staleQuantity, currentSymbolPrice)
     const userModified = await axios.put(process.env.NEXT_PUBLIC_CLIENT_KEY_BACKEND_URI + '/api/user/purchase' || '',{
       userToAddStock: {
         ...usuario,
@@ -24,7 +24,9 @@ export const StockPurchaseMenu = () => {
       currentSymbolPrice,
       staleQuantity
     })
-    console.log("TCL: handlePurchase -> userModified", userModified)
+
+    const newUser = await userModified.data
+    setUserLogged && setUserLogged(newUser)
   }
 
   return (

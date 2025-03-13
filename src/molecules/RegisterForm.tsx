@@ -7,12 +7,12 @@ import axios from "axios"
 import dotenv from "dotenv"
 import { StockContext } from "@/context"
 
-dotenv.config({ path: './.env' });
+dotenv.config({ path: './.env.local' });
 
 
 export const RegisterForm = () => {
-  const {  setUserLogged } = useContext(StockContext)
-  const uri = process.env.BACKEND_URI
+  const {  setUserLogged, toggleSideBarMenu } = useContext(StockContext)
+  const uri = process.env.NEXT_PUBLIC_CLIENT_KEY_BACKEND_URI
   
   const router = useRouter()
   
@@ -34,7 +34,6 @@ export const RegisterForm = () => {
           ...data
         }
       )
-      console.log("TCL: handleRegister -> registerResponse", registerResponse)
       if(registerResponse.status == 200){
         const loginResponse = await axios.post(
           `${uri}/api/auth/login`,
@@ -44,8 +43,11 @@ export const RegisterForm = () => {
         )
         if(loginResponse.status == 200){
           const user = loginResponse.data.token
+          localStorage.setItem('user', JSON.stringify(user.user))
           setUserLogged && setUserLogged(user.user)
-          router.push('/')
+          localStorage.setItem('authToken', JSON.stringify(user.token))
+          toggleSideBarMenu && toggleSideBarMenu('')
+          router.push('/stock')
         }
       }
     } catch (error) {
@@ -57,11 +59,11 @@ export const RegisterForm = () => {
   return (
     <form onSubmit={(e)=>handleRegister(e)} className='flex flex-col justify-start w-full p-4 rounded-lg items-start gap-4 text-black'>
         <div className='flex flex-col gap-4 text-white rounded-md w-full bg-black p-4'>
-            <CustomText content="Registrate" type="subtitle" colorText="'#fff'" bold={true} position="left" />
-            <CustomInput name="nombre" content="Nombre" theme="dark" type="text" withLabel={false}/>
-            <CustomInput name="correo" content="Correo electronico" theme="dark" type="text" withLabel={false}/>
-            <CustomInput name="usuario" content="Usuario" theme="dark" type="text" withLabel={false}/>
-            <CustomInput name="contraseña" content="Contraseña" theme="dark" type="password" withLabel={false}/>
+            <CustomText content="Register" type="subtitle" colorText="'#fff'" bold={true} position="left" />
+            <CustomInput name="nombre" content="Name" theme="dark" type="text" withLabel={false}/>
+            <CustomInput name="correo" content="Email" theme="dark" type="text" withLabel={false}/>
+            <CustomInput name="usuario" content="user" theme="dark" type="text" withLabel={false}/>
+            <CustomInput name="contraseña" content="Password" theme="dark" type="password" withLabel={false}/>
             <CustomButton bg="white" colorText="black" bold={true} hoverColor="white" hoverBg="rgb(23 37 84)"  type="submit" content="Registrarme ahora"/>
         </div>
     </form>

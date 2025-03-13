@@ -23,7 +23,6 @@ export const LoginForm = () => {
     
     const data = JSON.parse(JSON.stringify(formData))
     
-    console.log("TCL: LoginForm -> uri", uri)
     try {
       const loginResponse = await axios.post(
         `${uri}/api/auth/login`,

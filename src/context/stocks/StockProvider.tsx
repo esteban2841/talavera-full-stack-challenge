@@ -47,12 +47,10 @@ export const StockProvider = ({children}: Props) => {
 
     const router = useRouter()
     const toggleSideBarMenu = (payload: StockContext) =>{
-			console.log("TCL: toggleSideBarMenu -> payload", payload)
             
         dispatch({type:'toggleSideBarMenu', payload: payload})
     }
     const toggleStockListModal = (payload: StockContext) =>{
-		console.log("TCL: toggleStockListModal -> payload", payload)
         dispatch({type:'toggleStockListModal', payload: payload})
     }
     
@@ -69,11 +67,9 @@ export const StockProvider = ({children}: Props) => {
       
     }
     const setStockListGainers = async (payload: StockContext) =>{
-		console.log("TCL: setStockListGainers -> payload", payload)
         const uri = 'https://www.alphavantage.co/query?function=TOP_GAINERS_LOSERS&apikey=' + process.env.ALPHA_API_KEY
         try {
             const respuesta = await axios.get(uri);
-            console.log("TCL: getStockTop -> respuesta", respuesta)
             dispatch({type:'setStockListGainers', payload: {
                 top_gainers: respuesta.data.top_gainers,
                 top_losers: respuesta.data.top_losers

@@ -10,10 +10,8 @@ const Page = async ({params}: {params : {symbol: string}}) => {
     
     if(!symbol) notFound()
     const url : string = `${process.env.BACKEND_URI || 'http://localhost:3001/api/stock/history/' + symbol}`
-	console.log("TCL: Page -> url", url)
 
     const SymbolStockHistory = await axios.get(url) 
-	console.log("TCL: Page -> SymbolStockHistory", SymbolStockHistory)
     
 
   return (

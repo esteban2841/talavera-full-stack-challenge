@@ -103,7 +103,6 @@ const IconContainer = styled.div<titleProps>`
 
 
 export const NavBarElements = ({customSize, color, fontFamilyType, weight, hoverColor, data, baseUrl}: titleProps) => {
-	console.log("TCL: NavBarElements -> data", data)
   const pathName = usePathname()
   const { toggleSideBarMenu } = useContext(StockContext)
   return (

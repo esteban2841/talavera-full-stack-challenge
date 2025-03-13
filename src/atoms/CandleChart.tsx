@@ -3,7 +3,7 @@
 import * as d3 from 'd3';
 import io from 'socket.io-client'
 import { RefObject, useContext, useEffect, useRef, useState } from 'react';
-import { StockHistory } from '@/types';
+import { StockHistory, StockType } from '@/types';
 import { StockContext } from '@/context';
 
 interface CandleChartProps {
@@ -15,12 +15,11 @@ interface CandleChartProps {
 export const CandlestickChart = ({ data, width = 1200, height = 600 }: CandleChartProps) => {
   const chartRef : RefObject<SVGSVGElement> = useRef(null);
 
-  const [currentData, setCurrentData] = useState(data)
+  const [currentData, setCurrentData] = useState<any>(data)
   const {setCurrentSymbolPrice} = useContext(StockContext)
   
   useEffect(() => {
     if (!currentData || currentData.length === 0) return;
-    console.log("TCL: currentData", currentData)
 
     const socket = io('http://localhost:3002')
     // Listen for new prices from the server
@@ -110,11 +109,6 @@ export const CandlestickChart = ({ data, width = 1200, height = 600 }: CandleCha
       <figure className='w-full relative bg-black h-full flex-col flex justify-center items-center'>
       <svg className='chart' 
       style={{
-      //   display: 'flex',
-      //   justifyContent: 'center',
-      //   alignItems: 'center',
-      //   width: '1200px',
-      //   height: '700px',
         overflow: 'visible'
       }}
       

@@ -295,14 +295,8 @@ const StocksListModal = () => {
     const router = useRouter()
  
     const handleStockHistoryBroadcast = (symbol: string)=>{
-		console.log("TCL: handleStockHistoryBroadcast -> symbol", symbol)
         router.push(`/stock/${encodeURIComponent(symbol)}`);
     }
-
-    // useEffect(()=>{
-    //     setStockListGainers && setStockListGainers()
-    //     console.log("TCL: StocksListModal -> stockGainersList", stockGainersList)
-    // }, [])
 
   return (
     <div className='flex flex-col md:w-[680px] w-full justify-start items-center bg-[#26262E] absolute top-14 left-16 p-4 m-0 rounded-lg'>

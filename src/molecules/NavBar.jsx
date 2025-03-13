@@ -84,7 +84,7 @@ const NavBar = ({baseUrl}) => {
     const isMounted = useMounted()
     const router = useRouter()
 
-    const {activeStockListModal, setUserLogged} = useContext(StockContext)
+    const {activeStockListModal, setUserLogged, usuario} = useContext(StockContext)
     const [userLoggedLocally, setUserLoggedLocally] = useState()
     const [renderSections, setRenderSections] = useState([])
     const withoutUserLoggedSections =  [
@@ -93,7 +93,7 @@ const NavBar = ({baseUrl}) => {
     ] 
     const withUserLoggedSections = (user)=>[
         {title: 'balance', href: '/stock', children: <span className='flex items-center justify-center'>
-            <h2>{`$ ${user.balance}`}</h2>
+            <h2>{`Stock trace`}</h2>
         </span>},
         {title: 'account', sideBarMenu: 'account', children: <ProfileIcon user={user}/> },
     ]
@@ -112,12 +112,19 @@ const NavBar = ({baseUrl}) => {
         window.addEventListener('scroll', handleChangeColorOnNav)
         return () => window.removeEventListener('scroll', handleChangeColorOnNav)
       }, [isMounted])
+
+
     
       useEffect(() => {
-        const userloggedStorage = localStorage.getItem('authToken')
-        setUserLoggedLocally(userloggedStorage)
         const userInfo = JSON.parse(localStorage.getItem('user'))
         setUserLogged(userInfo)
+    }, [])
+    
+    
+    useEffect(() => {
+        const userInfo = JSON.parse(localStorage.getItem('user'))
+        const userloggedStorage = localStorage.getItem('authToken')
+        setUserLoggedLocally(userloggedStorage)
         userloggedStorage 
           ? setRenderSections(withUserLoggedSections(userInfo))
           : setRenderSections(withoutUserLoggedSections)

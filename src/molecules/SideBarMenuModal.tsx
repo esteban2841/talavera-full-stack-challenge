@@ -35,7 +35,6 @@ const SideBarModal = styled.aside`
 
 export const SideBarMenuModal = () => {
     const { activeSideBarMenu } = useContext(StockContext)
-	console.log("TCL: SideBarMenuModal -> activeSideBarMenu", activeSideBarMenu)
 
 
     const ActiveMenuUi = (menu : string)=>{

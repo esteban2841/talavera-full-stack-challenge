@@ -24,10 +24,9 @@ export const StockReducer = (state: StockContext, action: Actions) : StockContex
             
             return {
                 ...state,
-                usuario: action.payload
+                usuario: {...action.payload}
             }
         case 'setStockListGainers':
-            console.log("TCL: action.payload", action.payload)
             
             return {
                 ...state,

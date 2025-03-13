@@ -1,7 +1,6 @@
 import { Background3DModel, CustomText } from "@/atoms";
 import { NavBar, Object3DRenderer } from "@/molecules";
 import { Suspense } from "react";
-console.log("TCL: process.env.NODE_ENV", process.env.NODE_ENV)
 const defaultUrl = process.env.PROD_DOMAIN
 ? `https://${process.env.PROD_DOMAIN}`
 : "http://localhost:3000";
